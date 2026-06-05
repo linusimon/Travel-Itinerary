@@ -1,0 +1,8 @@
+flask==2.2.5
+flask-cors==3.0.10
+openai==0.28.1
+pydantic==1.10.13
+httpx==0.24.1
+requests==2.31.0
+python-dotenv==0.21.1
+huggingface-hub==0.16.4

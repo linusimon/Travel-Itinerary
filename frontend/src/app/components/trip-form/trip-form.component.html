@@ -1,0 +1,99 @@
+<div class="trip-form-container">
+  <h2>Plan Your Perfect Trip</h2>
+  
+  <form [formGroup]="tripForm" (ngSubmit)="onSubmit()" class="trip-form">
+    
+    <!-- Destination -->
+    <div class="form-group">
+      <label for="destination">Destination *</label>
+      <input 
+        type="text" 
+        id="destination" 
+        formControlName="destination"
+        placeholder="e.g., Paris, Tokyo, New York"
+        class="form-control">
+    </div>
+
+    <!-- Dates -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="start_date">Start Date *</label>
+        <input 
+          type="date" 
+          id="start_date" 
+          formControlName="start_date"
+          class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="end_date">End Date *</label>
+        <input 
+          type="date" 
+          id="end_date" 
+          formControlName="end_date"
+          class="form-control">
+      </div>
+    </div>
+
+    <!-- Budget -->
+    <div class="form-group">
+      <label>Budget Level</label>
+      <div class="radio-group">
+        <label *ngFor="let option of budgetOptions" class="radio-option">
+          <input 
+            type="radio" 
+            [value]="option" 
+            formControlName="budget">
+          <span>{{ option | titlecase }}</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Pace -->
+    <div class="form-group">
+      <label>Travel Pace</label>
+      <div class="radio-group">
+        <label *ngFor="let option of paceOptions" class="radio-option">
+          <input 
+            type="radio" 
+            [value]="option" 
+            formControlName="pace">
+          <span>{{ option | titlecase }}</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Interests -->
+    <div class="form-group">
+      <label>Interests (Select all that apply)</label>
+      <div class="interests-grid">
+        <button 
+          type="button"
+          *ngFor="let interest of interestOptions"
+          [class.selected]="isInterestSelected(interest)"
+          (click)="toggleInterest(interest)"
+          class="interest-chip">
+          {{ interest }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Optional Fields -->
+    <div class="form-group">
+      <label for="accommodation">Accommodation Location (Optional)</label>
+      <input 
+        type="text" 
+        id="accommodation" 
+        formControlName="accommodation_location"
+        placeholder="e.g., Downtown, near beach"
+        class="form-control">
+    </div>
+
+    <button 
+      type="submit" 
+      [disabled]="!tripForm.valid" 
+      class="btn-primary">
+      Generate Itinerary
+    </button>
+  </form>
+</div>

@@ -1,0 +1,82 @@
+Folder PATH listing for volume Windows
+Volume serial number is AEB2-0E8F
+C:.
+|   project-structure.txt
+|   QUICKSTART.md
+|   README.md
+|   SETUP.md
+|   
++---backend
+|   |   .env
+|   |   .env.example
+|   |   .gitignore
+|   |   README.md
+|   |   requirements.txt
+|   |   run.py
+|   |   setup.bat
+|   |   start.bat
+|   |   
+|   \---app
+|       |   config.py
+|       |   main.py
+|       |   models.py
+|       |   __init__.py
+|       |   
+|       +---routes
+|       |       itinerary_routes.py
+|       |       __init__.py
+|       |       
+|       \---services
+|               itinerary_service.py
+|               llm_service.py
+|               tourism_api_service.py
+|               __init__.py
+|               
+\---frontend
+    |   .gitignore
+    |   angular.json
+    |   package.json
+    |   README.md
+    |   setup.bat
+    |   start.bat
+    |   tsconfig.app.json
+    |   tsconfig.json
+    |   
+    \---src
+        |   index.html
+        |   main.ts
+        |   styles.scss
+        |   
+        +---app
+        |   |   app.component.html
+        |   |   app.component.scss
+        |   |   app.component.ts
+        |   |   app.module.ts
+        |   |   
+        |   +---components
+        |   |   +---chat-interface
+        |   |   |       chat-interface.component.html
+        |   |   |       chat-interface.component.scss
+        |   |   |       chat-interface.component.ts
+        |   |   |       
+        |   |   +---itinerary-display
+        |   |   |       itinerary-display.component.html
+        |   |   |       itinerary-display.component.scss
+        |   |   |       itinerary-display.component.ts
+        |   |   |       
+        |   |   \---trip-form
+        |   |           trip-form.component.html
+        |   |           trip-form.component.scss
+        |   |           trip-form.component.ts
+        |   |           
+        |   +---models
+        |   |       itinerary.model.ts
+        |   |       
+        |   \---services
+        |           api.service.ts
+        |           
+        +---assets
+        \---environments
+                environment.prod.ts
+                environment.ts
+                

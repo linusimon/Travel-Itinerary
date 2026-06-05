@@ -1,0 +1,153 @@
+.itinerary-section {
+    padding: 50px 20px;
+    background: #f8fafc;
+}
+
+.itinerary-container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+.itinerary-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.itinerary-header h2 {
+    color: #1f2937;
+    margin-bottom: 15px;
+}
+
+.trip-summary {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.days-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.day-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.day-header h3 {
+    color: #2563eb;
+}
+
+.day-header span {
+    color: #6b7280;
+}
+
+.activities {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.activity-item {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-time {
+    min-width: 90px;
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.activity-content h4 {
+    margin-bottom: 5px;
+    color: #111827;
+}
+
+.activity-content p {
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.itinerary-actions {
+    margin-top: 35px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.action-btn:hover {
+    background: #1d4ed8;
+}
+
+.action-btn.secondary {
+    background: #6b7280;
+}
+
+.action-btn.secondary:hover {
+    background: #4b5563;
+}
+
+.loading-spinner {
+    width: 55px;
+    height: 55px;
+    border: 5px solid #e5e7eb;
+    border-top: 5px solid #2563eb;
+    border-radius: 50%;
+    margin: 25px auto;
+    animation: spin 1s linear infinite;
+}
+
+.itinerary-container p {
+    text-align: center;
+    color: #6b7280;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .activity-item {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .day-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}

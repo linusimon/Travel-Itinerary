@@ -1,0 +1,42 @@
+<div class="chat-container">
+  <div class="chat-messages">
+    <div 
+      *ngFor="let message of messages" 
+      [class]="'message message-' + message.role">
+      <div class="message-avatar">
+        <span *ngIf="message.role === 'user'">👤</span>
+        <span *ngIf="message.role === 'assistant'">🤖</span>
+      </div>
+      <div class="message-content">
+        <div class="message-text">{{ message.content }}</div>
+        <div class="message-time" *ngIf="message.timestamp">
+          {{ message.timestamp | date:'short' }}
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="message message-assistant">
+      <div class="message-avatar">🤖</div>
+      <div class="message-content">
+        <div class="typing-indicator">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input-container">
+    <textarea
+      [(ngModel)]="userInput"
+      (keypress)="onKeyPress($event)"
+      placeholder="Ask me to refine your itinerary..."
+      class="chat-input"
+      rows="2"></textarea>
+    <button 
+      (click)="onSendMessage()"
+      [disabled]="!userInput.trim() || isLoading"
+      class="send-button">
+      Send
+    </button>
+  </div>
+</div>

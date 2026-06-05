@@ -1,0 +1,62 @@
+<div class="itinerary-container" *ngIf="itinerary">
+  <div class="itinerary-header">
+    <h1>{{ itinerary.destination }}</h1>
+    <p class="duration">{{ itinerary.duration }}</p>
+    
+    <div class="action-buttons">
+      <button (click)="exportItinerary('text')" class="btn-secondary">
+        📄 Export as Text
+      </button>
+      <button (click)="exportItinerary('json')" class="btn-secondary">
+        📋 Export as JSON
+      </button>
+      <button (click)="printItinerary()" class="btn-secondary">
+        🖨️ Print
+      </button>
+    </div>
+  </div>
+
+  <div class="itinerary-content">
+    <div class="raw-itinerary" *ngIf="itinerary.raw_itinerary">
+      <pre>{{ itinerary.raw_itinerary }}</pre>
+    </div>
+    
+    <!-- If you have structured itinerary -->
+    <div *ngIf="itinerary.itinerary" class="structured-itinerary">
+      <div *ngFor="let day of itinerary.itinerary" class="day-section">
+        <h3>Day {{ day.day }} - {{ day.date }}</h3>
+        <p class="day-theme">{{ day.theme }}</p>
+        
+        <div *ngFor="let activity of day.activities" class="activity">
+          <div class="activity-time">{{ activity.time }}</div>
+          <div class="activity-details">
+            <h4>{{ activity.title }}</h4>
+            <p>{{ activity.description }}</p>
+            <div class="activity-meta">
+              <span>📍 {{ activity.location }}</span>
+              <span>⏱️ {{ activity.duration }}</span>
+              <span *ngIf="activity.cost_estimate">💰 {{ activity.cost_estimate }}</span>
+            </div>
+            <p *ngIf="activity.tips" class="activity-tips">💡 {{ activity.tips }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Travel Tips -->
+    <div *ngIf="itinerary.travel_tips && itinerary.travel_tips.length" class="tips-section">
+      <h3>✈️ Travel Tips</h3>
+      <ul>
+        <li *ngFor="let tip of itinerary.travel_tips">{{ tip }}</li>
+      </ul>
+    </div>
+
+    <!-- Packing Suggestions -->
+    <div *ngIf="itinerary.packing_suggestions && itinerary.packing_suggestions.length" class="packing-section">
+      <h3>🎒 Packing Suggestions</h3>
+      <ul>
+        <li *ngFor="let item of itinerary.packing_suggestions">{{ item }}</li>
+      </ul>
+    </div>
+  </div>
+</div>

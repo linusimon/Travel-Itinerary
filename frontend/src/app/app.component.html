@@ -1,0 +1,93 @@
+<div class="app-container">
+  <!-- Full-Screen Hero Section with Form (only show on form view) -->
+  <div *ngIf="currentView === 'form'" class="hero-fullscreen">
+    <div class="hero-background" (click)="scrollToForm()">
+      <img src="assets/3d-animated-landing-page.gif" alt="Travel Animation" class="fullscreen-gif">
+    </div>
+    
+    <div class="hero-content-wrapper">
+      <div class="hero-header" (click)="scrollToForm()">
+        <h1 class="hero-title">
+          <span class="gradient-text">{{ title }}</span>
+        </h1>
+        <p class="hero-subtitle">Click to plan your perfect trip with AI-powered personalized itineraries</p>
+        <div class="hero-features">
+          <div class="feature-badge">
+            <span class="badge-icon">✨</span>
+            <span>AI-Powered</span>
+          </div>
+          <div class="feature-badge">
+            <span class="badge-icon">🎯</span>
+            <span>Personalized</span>
+          </div>
+          <div class="feature-badge">
+            <span class="badge-icon">⚡</span>
+            <span>Instant Results</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simple Header for other views -->
+  <header class="app-header" *ngIf="currentView !== 'form'">
+    <h1>🌍 {{ title }}</h1>
+    <p>Click to plan your perfect trip with AI-powered personalized itineraries</p>
+  </header>
+
+  <div class="error-message" *ngIf="error">
+    <span class="error-icon">⚠️</span>
+    <span>{{ error }}</span>
+  </div>
+
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Generating your personalized itinerary...</p>
+  </div>
+
+  <main class="app-main">
+    <!-- Trip Form View with Full-Screen Background -->
+    <div *ngIf="currentView === 'form'" class="view-container">
+      <div class="form-background-section">
+        <app-trip-form (formSubmit)="onFormSubmit($event)"></app-trip-form>
+      </div>
+    </div>
+
+    <!-- Itinerary View -->
+    <div *ngIf="currentView === 'itinerary'" class="view-container">
+      <div class="view-actions">
+        <button (click)="startNewItinerary()" class="btn-secondary">
+          🔄 New Itinerary
+        </button>
+        <button (click)="toggleChatView()" class="btn-primary">
+          💬 Refine with Chat
+        </button>
+      </div>
+      
+      <app-itinerary-display 
+        [itinerary]="itinerary"
+        (exportRequest)="onExportItinerary($event)">
+      </app-itinerary-display>
+    </div>
+
+    <!-- Chat View -->
+    <div *ngIf="currentView === 'chat'" class="view-container">
+      <div class="view-actions">
+        <button (click)="toggleChatView()" class="btn-secondary">
+          ← Back to Itinerary
+        </button>
+      </div>
+
+      <app-chat-interface
+        [messages]="chatMessages"
+        [tripContext]="tripPreferences"
+        [isLoading]="isLoading"
+        (sendMessage)="onSendChatMessage($event)">
+      </app-chat-interface>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <p>Powered by AI for TCS GenAI Hackathon 2026</p>
+  </footer>
+</div>
