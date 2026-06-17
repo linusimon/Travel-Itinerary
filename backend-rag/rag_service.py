@@ -13,7 +13,6 @@ from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA
 import httpx
 from config import Config
-from config import Config
 
 from tcs_embeddings import TCSGenAIEmbeddings
 
