@@ -1,0 +1,9 @@
+Business Analysis Automated Impact Analysis Summarizer
+PROBLEM STATEMENT
+Business analysts often perform impact analysis to understand how proposed changes affect systems, processes, and stakeholders. This requires consolidating information from multiple documents and stakeholder inputs, which is time-consuming and prone to omissions. Existing tools do not automate impact summarization or provide consistent formats, leading to delays and inconsistent documentation quality. An Al summarizer that generates clear impact analysis reports from input documents can enhance analyst productivity and project alignment.
+Data Considerations:
+Change request documents, stakeholder feedback, and system specifications in text or PDF format. Data sourced from internal project archives or synthetic generation. Volume sufficient for demo with 20 documents. Preprocessing includes OCR and text extraction. Privacy considerations require anonymization or synthetic data.
+Consider using synthetic or anonymized data where appropriate. Ensure data quality and relevance to the problem context.
+SOLUTION EXPECTATIONS
+An Al summarization tool that accepts multiple documents and generates structured impact analysis reports using GenAl capabilities. Features include document upload, summary display, and export options. Integration limited to local files. Success metrics include summary completeness and user satisfaction. Demo includes interactive document upload and summary generation.
+Feel free to explore creative solutions that align with the problem context and objectives.
