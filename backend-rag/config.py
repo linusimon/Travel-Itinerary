@@ -15,5 +15,5 @@ class Config:
     DEBUG = True
 
     GENAI_API_KEY = os.getenv("HF_TOKEN")
-    GENAI_BASE_URL = "https://router.huggingface.co/v1"
-    CHAT_MODEL = "mistralai/Mistral-7B-Instruct-v0.2:featherless-ai"
+    GENAI_BASE_URL = "https://genailab.tcs.in/"
+    CHAT_MODEL = "azure/genailab-maas-gpt-4o"
