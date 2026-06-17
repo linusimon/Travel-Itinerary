@@ -29,13 +29,13 @@ class RAGService:
             if Config.GENAI_API_KEY and Config.GENAI_API_KEY not in ["YOUR_KEY_HERE", "your_api_key_here", ""]:
                 self.embedding_model = TCSGenAIEmbeddings()
                 self.embeddings_available = True
-                print("✓ TCS GenAI embedding model initialized successfully")
+                print("[OK] TCS GenAI embedding model initialized successfully")
             else:
-                print("⚠ GenAI API key not configured")
-                print("⚠ RAG document upload will be disabled")
+                print("[WARN] GenAI API key not configured")
+                print("[WARN] RAG document upload will be disabled")
         except Exception as e:
-            print(f"⚠ Could not initialize TCS GenAI embeddings: {str(e)}")
-            print("⚠ RAG document upload will be disabled")
+            print(f"[ERROR] Could not initialize TCS GenAI embeddings: {str(e)}")
+            print("[WARN] RAG document upload will be disabled")
             self.embedding_model = None
        
         # Check if GenAI API key is configured (needed for both LLM and embeddings)
@@ -81,7 +81,7 @@ class RAGService:
                         "vectordb",
                         allow_dangerous_deserialization=True
                     )
-                    print(f"✓ Loaded existing FAISS vector store")
+                    print(f"[OK] Loaded existing FAISS vector store")
                 else:
                     print("  No existing vector store found")
             except Exception as e:

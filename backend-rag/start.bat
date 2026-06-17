@@ -17,6 +17,7 @@ echo.
 
 echo Starting Flask server...
 @REM python app.py
-flask run
+flask run --port=5001
 
 pause
+
