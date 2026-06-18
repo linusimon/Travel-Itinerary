@@ -16,6 +16,7 @@ call venv\Scripts\activate
 echo.
 
 echo Starting Flask server on port 5002...
+@REM python app.py
 flask run --port=5002
 
 pause

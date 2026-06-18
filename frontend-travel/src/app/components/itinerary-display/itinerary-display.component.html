@@ -1,0 +1,96 @@
+<div class="itinerary-container" *ngIf="itinerary">
+  
+  <!-- Header Section -->
+  <div class="itinerary-header glass-card">
+    <div class="header-main">
+      <span class="destination-badge">✈️ TARGET DESTINATION</span>
+      <h1>🌍 {{ itinerary.destination || 'Your Custom Getaway' }}</h1>
+      <div class="meta-row">
+        <p class="duration" *ngIf="itinerary.duration">🗓️ <strong>Duration:</strong> {{ itinerary.duration }}</p>
+        <span class="badge-active" *ngIf="parsedDays && parsedDays.length > 0">⚡ RAG Optimization Active</span>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button (click)="exportItinerary('text')" class="btn-action btn-txt">
+        📄 Download TXT
+      </button>
+      <button (click)="exportItinerary('json')" class="btn-action btn-json">
+        📋 Download JSON
+      </button>
+      <button (click)="printItinerary()" class="btn-action btn-print">
+        🖨️ Print View
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="itinerary-content">
+    
+    <!-- Beautiful Parsed Day-by-Day Timeline -->
+    <div *ngIf="parsedDays && parsedDays.length > 0" class="timeline-itinerary">
+      <div *ngFor="let day of parsedDays" class="timeline-day-row">
+        
+        <!-- Left Side: Timeline Marker -->
+        <div class="timeline-marker">
+          <div class="marker-circle">
+            <span class="day-num">{{ day.dayNumber }}</span>
+          </div>
+          <div class="marker-line"></div>
+        </div>
+
+        <!-- Right Side: Content Card -->
+        <div class="day-card glass-card">
+          <div class="day-card-header">
+            <h2>Day {{ day.dayNumber }}</h2>
+            <span class="day-date" *ngIf="day.date">{{ day.date }}</span>
+          </div>
+          
+          <div class="day-card-body">
+            <div *ngFor="let section of day.sections" class="section-block">
+              <h3 class="section-title">
+                <!-- Select period badges based on string keywords -->
+                <span class="time-badge" 
+                      [class.morning]="section.period.toLowerCase().includes('morning')"
+                      [class.afternoon]="section.period.toLowerCase().includes('afternoon')"
+                      [class.evening]="section.period.toLowerCase().includes('evening') || section.period.toLowerCase().includes('night')"
+                      [class.tips]="section.period.toLowerCase().includes('tip') || section.period.toLowerCase().includes('essential')">
+                  <span class="badge-icon" *ngIf="section.period.toLowerCase().includes('morning')">🌅</span>
+                  <span class="badge-icon" *ngIf="section.period.toLowerCase().includes('afternoon')">☀️</span>
+                  <span class="badge-icon" *ngIf="section.period.toLowerCase().includes('evening') || section.period.toLowerCase().includes('night')">🌙</span>
+                  <span class="badge-icon" *ngIf="section.period.toLowerCase().includes('tip') || section.period.toLowerCase().includes('essential')">💡</span>
+                  {{ section.period }}
+                </span>
+              </h3>
+              
+              <ul class="activity-list">
+                <li *ngFor="let activity of section.activities" class="activity-item">
+                  <span class="compass-bullet">🧭</span>
+                  <span class="activity-text">{{ activity }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Toggle for Raw text view -->
+    <div class="raw-toggle-container" *ngIf="parsedDays && parsedDays.length > 0">
+      <button (click)="showRaw = !showRaw" class="btn-toggle-raw">
+        {{ showRaw ? '🙈 Hide Source Text View' : '👁️ View Raw AI Source Output' }}
+      </button>
+    </div>
+
+    <!-- Raw Text View (fallback or when toggled) -->
+    <div class="raw-itinerary-card glass-card" *ngIf="showRaw || !parsedDays || parsedDays.length === 0">
+      <div class="raw-header">
+        <span class="raw-icon">📝</span>
+        <h3>Full Text Itinerary Output</h3>
+      </div>
+      <pre class="raw-text-pre">{{ itinerary.raw_itinerary }}</pre>
+    </div>
+
+  </div>
+</div>

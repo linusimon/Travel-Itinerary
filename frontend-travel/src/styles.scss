@@ -1,0 +1,79 @@
+/* Nature Getaway Boutique Hotel Theme - Global Style Definitions */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --nature-bg: #f9f7f2;          /* Soft alabaster sand */
+  --nature-bg-dark: #f0ede4;     /* Slightly darker sand neutral */
+  --accent-forest: #0f3d32;     /* Rich deep forest green */
+  --accent-forest-hover: #184f42;
+  --accent-forest-glow: rgba(15, 61, 50, 0.15);
+  
+  --accent-clay: #c25d43;       /* Earthy warm clay/terracotta */
+  --accent-clay-hover: #a6472f;
+  --accent-clay-glow: rgba(194, 93, 67, 0.15);
+  
+  --accent-sage: #2d6a4f;       /* Organic sage green */
+  --accent-sage-light: rgba(45, 106, 79, 0.08);
+  
+  --text-dark: #1e2d27;         /* Deep green-charcoal for text */
+  --text-muted: #5e6f66;        /* Slate green-gray */
+  
+  --card-bg: #ffffff;
+  --card-border: rgba(15, 61, 50, 0.08);
+  --card-shadow: 0 16px 36px -12px rgba(15, 61, 50, 0.08);
+  
+  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--nature-bg);
+  color: var(--text-dark);
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styles matching the warm sand/sage theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--nature-bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 6px;
+  &:hover {
+    background: var(--accent-forest);
+  }
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.mt-2 { margin-top: 1rem; }
+.mt-4 { margin-top: 2rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+/* Print Overrides */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .app-header, .app-footer, .view-actions, button {
+    display: none !important;
+  }
+}

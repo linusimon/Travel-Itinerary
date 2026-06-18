@@ -1,0 +1,80 @@
+/* Saleva Analytics Light SaaS Theme - Global Style Definitions */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+  --saleva-bg: #f6f8fa;          /* Clean light ash gray background */
+  --saleva-sidebar: #ffffff;     /* Pure white sidebar */
+  --saleva-card: #ffffff;        /* Pure white cards */
+  --border-light: #eaedf1;       /* Light border */
+  
+  --primary-purple: #5f3afc;     /* Saleva Royal Violet/Purple */
+  --primary-purple-hover: #4c2dcf;
+  --primary-purple-glow: rgba(95, 58, 252, 0.08);
+  
+  --accent-coral: #ff6b6b;       /* Bright Coral Accent */
+  --accent-coral-hover: #fa5252;
+  --accent-coral-glow: rgba(255, 107, 107, 0.1);
+  
+  --text-dark: #0f172a;         /* Slate 900 */
+  --text-secondary: #475569;    /* Slate 600 */
+  --text-muted: #94a3b8;        /* Slate 400 */
+  
+  --card-shadow: 0 4px 20px -2px rgba(95, 58, 252, 0.03), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  
+  --font-display: 'Outfit', 'Inter', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--saleva-bg);
+  color: var(--text-dark);
+  min-height: 100vh;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden; /* Main page layout is structured inside sidebar/viewport container */
+}
+
+/* Customized scrollbar for dashboard */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 10px;
+  &:hover {
+    background: rgba(95, 58, 252, 0.5);
+  }
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.mt-2 { margin-top: 1rem; }
+.mt-4 { margin-top: 2rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+/* Print Overrides */
+@media print {
+  body {
+    background: white;
+    color: black;
+    overflow: visible;
+  }
+  .app-header, .app-sidebar, .view-actions, button {
+    display: none !important;
+  }
+}

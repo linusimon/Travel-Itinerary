@@ -1,0 +1,46 @@
+<div class="rag-compact-widget">
+  <div class="panel-header compact-header">
+    <div class="panel-title">
+      <span class="panel-icon">📚</span>
+      <h2>Guides Directory</h2>
+    </div>
+    <!-- Count metrics badge -->
+    <div class="kpi-pill" *ngIf="uploadedDocuments.length > 0">
+      <span class="kpi-number">{{ uploadedDocuments.length }}</span>
+      <span class="kpi-label">Active PDF Reference Guides</span>
+    </div>
+  </div>
+
+  <div class="compact-uploader-row">
+    <div class="file-picker-wrapper">
+      <input type="file" accept=".pdf" (change)="onFileSelected($event)" id="compactFileInput" hidden>
+      <label for="compactFileInput" class="btn-picker" [class.has-file]="selectedFile !== null">
+        <span class="picker-icon">{{ selectedFile ? '📄' : '📎' }}</span>
+        <span class="picker-text">{{ selectedFile ? selectedFile.name : 'Upload reference guide (PDF)...' }}</span>
+      </label>
+    </div>
+    
+    <div class="uploader-actions">
+      <button class="btn-primary-compact" [disabled]="!selectedFile || isUploading" (click)="uploadDocument()">
+        {{ isUploading ? 'Indexing...' : 'Index PDF' }}
+      </button>
+      <button class="btn-secondary-compact" *ngIf="uploadedDocuments.length > 0" (click)="clearAllDocuments()" title="Delete all active references">
+        🗑️
+      </button>
+    </div>
+  </div>
+
+  <!-- Status banner -->
+  <div class="compact-status-banner" *ngIf="uploadMessage" [class.err]="uploadMessage.includes('❌')" [class.ok]="uploadMessage.includes('✅')">
+    <span class="status-dot"></span>
+    <p class="status-text">{{ uploadMessage }}</p>
+  </div>
+
+  <!-- Horizontal Scroll view for tag list -->
+  <div class="compact-references-list scrollable-horizontal" *ngIf="uploadedDocuments.length > 0">
+    <div class="reference-chip-item" *ngFor="let doc of uploadedDocuments" [title]="doc">
+      <span class="file-icon">📁</span>
+      <span class="file-name">{{ doc }}</span>
+    </div>
+  </div>
+</div>

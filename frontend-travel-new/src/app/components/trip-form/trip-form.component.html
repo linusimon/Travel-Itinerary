@@ -1,0 +1,129 @@
+<div class="trip-form-container">
+  <div class="form-header">
+    <span class="header-badge">📋 PREFERENCES</span>
+    <h2>Trip Parameters</h2>
+    <p class="header-desc">Define your travel parameters. The model will analyze Guide documents to tailor the itinerary.</p>
+  </div>
+  
+  <form [formGroup]="tripForm" (ngSubmit)="onSubmit()" class="trip-form">
+    
+    <!-- Destination -->
+    <div class="form-group">
+      <label for="destination">Destination Target</label>
+      <div class="input-with-icon">
+        <span class="input-icon">📍</span>
+        <input 
+          type="text" 
+          id="destination" 
+          formControlName="destination"
+          placeholder="e.g., Paris, Tokyo, New York..."
+          class="form-control">
+      </div>
+    </div>
+
+    <!-- Dates -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="start_date">Departure Date</label>
+        <div class="input-with-icon">
+          <span class="input-icon">📅</span>
+          <input 
+            type="date" 
+            id="start_date" 
+            formControlName="start_date"
+            class="form-control">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="end_date">Return Date</label>
+        <div class="input-with-icon">
+          <span class="input-icon">📅</span>
+          <input 
+            type="date" 
+            id="end_date" 
+            formControlName="end_date"
+            class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <!-- Budget -->
+    <div class="form-group">
+      <label>Budget Level</label>
+      <div class="segmented-control">
+        <label *ngFor="let option of budgetOptions" class="segment-option" [class.active]="tripForm.get('budget')?.value === option">
+          <input 
+            type="radio" 
+            [value]="option" 
+            formControlName="budget"
+            class="segment-radio">
+          <span class="segment-label">
+            <span class="label-icon" *ngIf="option === 'budget'">💵</span>
+            <span class="label-icon" *ngIf="option === 'moderate'">💼</span>
+            <span class="label-icon" *ngIf="option === 'luxury'">💎</span>
+            {{ option | titlecase }}
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Pace -->
+    <div class="form-group">
+      <label>Travel Pace</label>
+      <div class="segmented-control">
+        <label *ngFor="let option of paceOptions" class="segment-option" [class.active]="tripForm.get('pace')?.value === option">
+          <input 
+            type="radio" 
+            [value]="option" 
+            formControlName="pace"
+            class="segment-radio">
+          <span class="segment-label">
+            <span class="label-icon" *ngIf="option === 'relaxed'">🏖️</span>
+            <span class="label-icon" *ngIf="option === 'moderate'">🚶</span>
+            <span class="label-icon" *ngIf="option === 'packed'">🏃</span>
+            {{ option | titlecase }}
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Interests -->
+    <div class="form-group">
+      <label>Areas of Interest</label>
+      <div class="interests-grid-custom">
+        <button 
+          type="button"
+          *ngFor="let interest of interestOptions"
+          [class.selected]="isInterestSelected(interest)"
+          (click)="toggleInterest(interest)"
+          class="custom-interest-chip">
+          <span class="chip-dot"></span>
+          <span class="chip-text">{{ interest }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Optional Fields -->
+    <div class="form-group">
+      <label for="accommodation">Accommodation Location (Optional)</label>
+      <div class="input-with-icon">
+        <span class="input-icon">🏨</span>
+        <input 
+          type="text" 
+          id="accommodation" 
+          formControlName="accommodation_location"
+          placeholder="e.g., Downtown, near beach..."
+          class="form-control">
+      </div>
+    </div>
+
+    <button 
+      type="submit" 
+      [disabled]="!tripForm.valid" 
+      class="btn-generate-itinerary">
+      <span>Generate Travel Itinerary</span>
+      <span class="btn-arrow">➔</span>
+    </button>
+  </form>
+</div>

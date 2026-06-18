@@ -1,4 +1,4 @@
-#!C:\team8\Travel-Itinerary\backend-rag-new\venv\Scripts\python.exe
+#!C:\Team6\Travel-Itinerary\backend-rag-new\venv\Scripts\python.exe
 """Extract pdf structure in XML format"""
 import logging
 import os.path

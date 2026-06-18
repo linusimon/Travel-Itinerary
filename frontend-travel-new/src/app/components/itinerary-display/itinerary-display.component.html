@@ -1,0 +1,126 @@
+<div class="itinerary-container" *ngIf="itinerary">
+  
+  <!-- Header Section -->
+  <div class="itinerary-header">
+    <div class="header-main">
+      <span class="destination-badge">🗺️ PLAN FOR</span>
+      <h1>{{ itinerary.destination || 'Custom Trip' }}</h1>
+      <div class="meta-row">
+        <p class="duration" *ngIf="itinerary.duration">🗓️ {{ itinerary.duration }}</p>
+        <span class="badge-active">RAG Optimized</span>
+      </div>
+    </div>
+    
+    <div class="action-buttons">
+      <button (click)="exportItinerary('text')" class="btn-action">
+        📄 Text
+      </button>
+      <button (click)="exportItinerary('json')" class="btn-action">
+        📋 JSON
+      </button>
+      <button (click)="printItinerary()" class="btn-action btn-print">
+        🖨️ Print
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Metrics Cards Row (Saleva Style) -->
+  <div class="itinerary-metrics-row" *ngIf="tripPreferences || itinerary.preferences">
+    <div class="metric-card">
+      <div class="metric-icon">💵</div>
+      <div class="metric-info">
+        <span class="metric-label">Budget level</span>
+        <h4 class="metric-value">{{ (tripPreferences?.budget || itinerary.preferences?.budget || 'Moderate') | titlecase }}</h4>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon">🏃</div>
+      <div class="metric-info">
+        <span class="metric-label">Travel Pace</span>
+        <h4 class="metric-value">{{ (tripPreferences?.pace || itinerary.preferences?.pace || 'Moderate') | titlecase }}</h4>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon">📅</div>
+      <div class="metric-info">
+        <span class="metric-label">Dates</span>
+        <h4 class="metric-value" *ngIf="tripPreferences?.start_date; else noDates">
+          {{ tripPreferences?.start_date | date:'mediumDate' }} - {{ tripPreferences?.end_date | date:'mediumDate' }}
+        </h4>
+        <ng-template #noDates>
+          <h4 class="metric-value">{{ itinerary.duration || 'Flexible' }}</h4>
+        </ng-template>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon">🎯</div>
+      <div class="metric-info">
+        <span class="metric-label">Interests</span>
+        <h4 class="metric-value" [title]="(tripPreferences?.interests || itinerary.preferences?.interests || []).join(', ')">
+          {{ (tripPreferences?.interests || itinerary.preferences?.interests || []).length || 3 }} Categories
+        </h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Horizontal Snapping Days Timeline (Our "Scroll Feature") -->
+  <div class="itinerary-viewport">
+    
+    <div class="horizontal-scroll-hint" *ngIf="parsedDays && parsedDays.length > 1">
+      <span>Swipe / Scroll horizontally to explore timeline days ➔</span>
+    </div>
+
+    <div *ngIf="parsedDays && parsedDays.length > 0" class="parsed-itinerary-horizontal scrollable-horizontal">
+      <div *ngFor="let day of parsedDays" class="day-card-horizontal">
+        <div class="day-card-header">
+          <div class="day-indicator">
+            <span class="day-num">D{{ day.dayNumber }}</span>
+          </div>
+          <span class="day-date" *ngIf="day.date">{{ day.date }}</span>
+        </div>
+        
+        <div class="day-card-body scrollable-content">
+          <div *ngFor="let section of day.sections" class="section-block">
+            <h3 class="section-title">
+              <span class="time-badge"
+                    [class.morning]="section.period.toLowerCase().includes('morning')"
+                    [class.afternoon]="section.period.toLowerCase().includes('afternoon')"
+                    [class.evening]="section.period.toLowerCase().includes('evening') || section.period.toLowerCase().includes('night')"
+                    [class.tips]="section.period.toLowerCase().includes('tip') || section.period.toLowerCase().includes('essential')">
+                <span class="badge-icon" *ngIf="section.period.toLowerCase().includes('morning')">🌅</span>
+                <span class="badge-icon" *ngIf="section.period.toLowerCase().includes('afternoon')">☀️</span>
+                <span class="badge-icon" *ngIf="section.period.toLowerCase().includes('evening') || section.period.toLowerCase().includes('night')">🌙</span>
+                <span class="badge-icon" *ngIf="section.period.toLowerCase().includes('tip') || section.period.toLowerCase().includes('essential')">💡</span>
+                {{ section.period }}
+              </span>
+            </h3>
+            
+            <ul class="activity-list">
+              <li *ngFor="let activity of section.activities" class="activity-item">
+                <span class="bullet-dot"></span>
+                <span class="activity-text">{{ activity }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toggle for Raw text view -->
+    <div class="raw-toggle-container" *ngIf="parsedDays && parsedDays.length > 0">
+      <button (click)="showRaw = !showRaw" class="btn-toggle-raw">
+        {{ showRaw ? '🙈 Hide Source Text' : '👁️ View Raw AI Output' }}
+      </button>
+    </div>
+
+    <!-- Raw Text View (fallback or when toggled) -->
+    <div class="raw-itinerary-card" *ngIf="showRaw || !parsedDays || parsedDays.length === 0">
+      <div class="raw-header">
+        <span class="raw-icon">📝</span>
+        <h3>Full Text Itinerary Output</h3>
+      </div>
+      <pre class="raw-text-pre">{{ itinerary.raw_itinerary }}</pre>
+    </div>
+
+  </div>
+</div>

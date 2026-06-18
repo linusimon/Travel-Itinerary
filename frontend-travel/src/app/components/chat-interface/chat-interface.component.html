@@ -1,0 +1,60 @@
+<div class="chat-container glass-card">
+  <!-- Chat Header -->
+  <div class="chat-header">
+    <div class="avatar-title-group">
+      <div class="ai-avatar">🧭</div>
+      <div class="ai-details">
+        <h3>Travel Advisor Copilot</h3>
+        <span class="ai-status">RAG Database Online</span>
+      </div>
+    </div>
+    <span class="badge-context" *ngIf="tripContext">📍 {{ tripContext.destination }}</span>
+  </div>
+
+  <!-- Messages List -->
+  <div class="chat-messages scrollable-content">
+    <div 
+      *ngFor="let message of messages" 
+      [class]="'message-row message-' + message.role">
+      
+      <div class="message-avatar">
+        <span *ngIf="message.role === 'user'">👤</span>
+        <span *ngIf="message.role === 'assistant'">🤖</span>
+      </div>
+
+      <div class="message-bubble">
+        <div class="message-text">{{ message.content }}</div>
+        <div class="message-time" *ngIf="message.timestamp">
+          {{ message.timestamp | date:'shortTime' }}
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Typing Loader -->
+    <div *ngIf="isLoading" class="message-row message-assistant">
+      <div class="message-avatar">🤖</div>
+      <div class="message-bubble loading-bubble">
+        <div class="typing-indicator">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Input Row -->
+  <div class="chat-input-row">
+    <textarea
+      [(ngModel)]="userInput"
+      (keypress)="onKeyPress($event)"
+      placeholder="Ask me to make changes, add details, or recommend sights..."
+      class="chat-input-area"
+      rows="2"></textarea>
+    <button 
+      (click)="onSendMessage()"
+      [disabled]="!userInput.trim() || isLoading"
+      class="btn-send-message">
+      Send
+    </button>
+  </div>
+</div>

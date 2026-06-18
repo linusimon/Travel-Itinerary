@@ -1,0 +1,284 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.trip-form-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-forest), var(--accent-clay), transparent);
+  }
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  .header-badge {
+    background: rgba(45, 106, 79, 0.06);
+    border: 1px solid rgba(45, 106, 79, 0.2);
+    color: var(--accent-sage);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  
+  h2 {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-forest);
+    margin-bottom: 8px;
+  }
+  
+  .header-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+}
+
+.trip-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-forest);
+      letter-spacing: 0.3px;
+    }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* Input Fields */
+  .input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .form-control {
+      width: 100%;
+      background: var(--nature-bg);
+      border: 1px solid rgba(15, 61, 50, 0.08);
+      padding: 11px 16px 11px 40px;
+      border-radius: 6px;
+      color: var(--text-dark);
+      font-family: inherit;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+      outline: none;
+      
+      &:focus {
+        border-color: var(--accent-clay);
+        background: #ffffff;
+        box-shadow: 0 0 10px var(--accent-clay-glow);
+      }
+      
+      &::placeholder {
+        color: var(--text-muted);
+        opacity: 0.7;
+      }
+      
+      &[type="date"]::-webkit-calendar-picker-indicator {
+        filter: sepia(0.5) hue-rotate(90deg);
+        cursor: pointer;
+      }
+    }
+  }
+
+  /* Segmented Options */
+  .segmented-control {
+    display: flex;
+    background: var(--nature-bg-dark);
+    border: 1px solid rgba(15, 61, 50, 0.04);
+    padding: 3px;
+    border-radius: 6px;
+    gap: 4px;
+    
+    .segment-option {
+      flex: 1;
+      cursor: pointer;
+      position: relative;
+      
+      .segment-radio {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      
+      .segment-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        padding: 9px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        text-align: center;
+        
+        .label-icon {
+          font-size: 0.95rem;
+        }
+      }
+      
+      &.active .segment-label {
+        background: var(--accent-forest);
+        color: #ffffff;
+        box-shadow: 0 4px 10px rgba(15, 61, 50, 0.15);
+      }
+    }
+  }
+
+  /* Custom Interest Chips */
+  .interests-grid-custom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+    .custom-interest-chip {
+      background: var(--nature-bg);
+      border: 1px solid rgba(15, 61, 50, 0.06);
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      color: var(--text-dark);
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+      
+      .chip-dot {
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: var(--text-muted);
+        transition: all 0.2s;
+      }
+      
+      &:hover {
+        background: var(--nature-bg-dark);
+        border-color: rgba(15, 61, 50, 0.12);
+        transform: translateY(-1px);
+      }
+      
+      &.selected {
+        background: var(--accent-sage-light);
+        border-color: var(--accent-sage);
+        color: var(--accent-sage);
+        transform: translateY(-1px);
+        
+        .chip-dot {
+          background-color: var(--accent-sage);
+          box-shadow: 0 0 6px var(--accent-sage);
+        }
+      }
+    }
+  }
+
+  /* Submit trigger button */
+  .btn-generate-itinerary {
+    margin-top: 15px;
+    width: 100%;
+    padding: 14px;
+    background: var(--accent-clay);
+    color: #ffffff;
+    border: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--accent-clay-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    
+    &:hover:not(:disabled) {
+      background: var(--accent-clay-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(194, 93, 67, 0.35);
+    }
+    
+    &:disabled {
+      background: var(--nature-bg-dark);
+      color: var(--text-muted);
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    
+    .btn-arrow {
+      transition: transform 0.2s;
+    }
+    
+    &:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .trip-form-container {
+    padding: 24px;
+  }
+  .trip-form {
+    .form-row {
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+    .segmented-control {
+      flex-direction: column;
+    }
+  }
+}
