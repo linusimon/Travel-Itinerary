@@ -1,0 +1,64 @@
+TASKS = {
+    "summary": {
+        "task": "Summarize the conversation.",
+        "output_format": """
+        Summary:
+        Key Issue:
+        Resolution:
+        """
+    },
+
+    "sentiment": {
+        "task": "Analyze customer sentiment.",
+        "output_format": """
+        Overall Sentiment:
+        Sentiment Score (1-10):
+        Sentiment Journey:
+        Key Emotions:
+        Supporting Evidence:
+        """
+    },
+
+    "agent_performance": {
+        "task": "Evaluate agent performance.",
+        "output_format": """
+        Communication Score:
+        Empathy Score:
+        Problem Solving Score:
+        Professionalism Score:
+        Strengths:
+        Areas for Improvement:
+        Overall Assessment:
+        """
+    }
+}
+
+
+
+And your template should be:TEMPLATE = """
+You are an expert analyst.
+
+Context:
+{context}
+
+Content:
+{content}
+
+Task:
+{task}
+
+Instructions:
+- Analyze the content carefully.
+- Use the context when relevant.
+- Do not invent information.
+- Provide evidence-based conclusions.
+- If information is unavailable, mention it.
+
+Output Format:
+{output_format}
+"""
+
+
+retriever = self.vectordb.as_retriever(
+                search_type="similarity",
+                search_kwargs={"k": 15}
