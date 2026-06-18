@@ -44,3 +44,18 @@ TCS Confidential | 10
 • Completion of the working application 
 • Creativity and innovation in the given projects 
 • Participation and demonstration of understanding quizzes and debates 
+
+
+
+Prompt for generating new solution
+__________________________________
+
+I have hackathlon and need help with solving problem statement to provide AI solution. We are going to use gen ai TCS option. I aready have a repository C:\team8\Travel-Itinerary where we have created a sultion using angular and python flask. Frondend folder have angular and backend-rag folder have python solution. We would like to use upload document option and generate search result using prompt exactly how it is done in travel iternary for the following problem also. Idea is to generate a trascript for antigravity cli that we have added to visual studio code for generating the code for the solution. Need help with creating frontend-new folder and backend-rag new folder within the same solution of travel iternary for the new solution. Please see the problem statement below.         Business Analysis Automated Impact Analysis Summarizer
+PROBLEM STATEMENT
+Business analysts often perform impact analysis to understand how proposed changes affect systems, processes, and stakeholders. This requires consolidating information from multiple documents and stakeholder inputs, which is time-consuming and prone to omissions. Existing tools do not automate impact summarization or provide consistent formats, leading to delays and inconsistent documentation quality. An Al summarizer that generates clear impact analysis reports from input documents can enhance analyst productivity and project alignment.
+Data Considerations:
+Change request documents, stakeholder feedback, and system specifications in text or PDF format. Data sourced from internal project archives or synthetic generation. Volume sufficient for demo with 20 documents. Preprocessing includes OCR and text extraction. Privacy considerations require anonymization or synthetic data.
+Consider using synthetic or anonymized data where appropriate. Ensure data quality and relevance to the problem context.
+SOLUTION EXPECTATIONS
+An Al summarization tool that accepts multiple documents and generates structured impact analysis reports using GenAl capabilities. Features include document upload, summary display, and export options. Integration limited to local files. Success metrics include summary completeness and user satisfaction. Demo includes interactive document upload, summary generation, document upload for Rag and chat conversation after recieving summary. In the chat conversation, please provide option to upload image and use OCR to infer data and voice assistance so that typing of chat is not always required.
+Feel free to explore creative solutions that align with the problem context and objectives. https://genailab.tcs.in/ has the swagger apis for using different AI options. Please generate the transcript I can use in antigravity cli of visual studio code for generating entire solution.
