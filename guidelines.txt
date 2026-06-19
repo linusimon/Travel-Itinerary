@@ -50,7 +50,7 @@ TCS Confidential | 10
 Prompt for generating new solution
 __________________________________
 
-I have hackathlon and need help with solving problem statement to provide AI solution. We are going to use gen ai TCS option. I aready have a repository C:\team8\Travel-Itinerary where we have created a sultion using angular and python flask. Frondend folder have angular and backend-rag folder have python solution. We would like to use upload document option and generate search result using prompt exactly how it is done in travel iternary for the following problem also. Idea is to generate a trascript for antigravity cli that we have added to visual studio code for generating the code for the solution. Need help with creating frontend-new folder and backend-rag new folder within the same solution of travel iternary for the new solution. Please see the problem statement below.         Business Analysis Automated Impact Analysis Summarizer
+I have hackathlon and need help with solving problem statement to provide AI solution. We are going to use gen ai TCS option. I aready have a repository C:\Team6\Travel-Itinerary where we have created a solution using angular and python flask. Frontend-new-diff folder have angular and backend-rag-new folder have python solution. Idea is to generate a trascript for antigravity cli that we have added to visual studio code for generating the code for the solution. Need help with creating frontend-market folder and backend-rag-market new folder within the same solution of travel iternary for the new solution. Please see the problem statement below.         
 PROBLEM STATEMENT
 Portfolio managers in capital markets need concise, accurate risk summaries to make informed investment decisions.
 Current risk reports are lengthy and complex, requiring manual interpretation of multiple data sources such as market data, holdings, and external news. This delays decision-making and increases the risk of missed exposures. The scale involves portfolios with hundreds of holdings and daily market data updates. Existing tools lack generative Al capabilities to synthesize and summarize risk information contextually. There is a need for an Al-powered summarization tool that produces clear, actionable portfolio risk insights.
@@ -63,5 +63,132 @@ Deliver a web interface where portfolio managers view Al-generated daily risk su
 Integrate with financial market and portfolio APls. Success metrics include 85%+ summary relevance and positive user feedback. Demonstrate by generating reports for sample portfolios and showing integration with live data feeds.
 Provide user guide, technical documentation, and deployment instructions.
 Feel free to explore creative solutions that align with the problem context and objectives.
-Demo includes interactive document upload, summary generation, document upload for Rag and chat conversation after recieving summary. In the chat conversation, please provide option to upload image and use OCR to infer data and voice assistance so that typing of chat is not always required.
+Demo should includes interactive document upload for user portfolio and summary needs to be generated based on user portfolio. On init we need to call finhubb api to get latest news details load the data into RAG. When user document is uploaded and then clicked on analyze summary report button, it needs to generat details about holding and risk as per the problem statement. On analyze button click users holding infomation needs to passed to a LLM for clensing and we need to call Finnhubb with cleaned data to get live information of the holding. Using live data from finhubb about the portfolio holdings and user profile, pass the data to LLM and get the result that can be summaried. Chat conversation option should be there after recieving summary. In the chat conversation, please provide option to upload image and use OCR to infer data and voice assistance so that typing of chat is not always required.
 Feel free to explore creative solutions that align with the problem context and objectives. https://genailab.tcs.in/ has the swagger apis for using different AI options. Please generate the transcript I can use in antigravity cli of visual studio code for generating entire solution.
+
+
+
+
+
+Capital Markets Portfolio Risk Summarizer
+This implementation plan details the creation of the Capital Markets Portfolio Risk Summarizer solution inside the hackathon workspace. This AI-powered tool allows portfolio managers to upload portfolio files (PDF, CSV, JSON, XML), clean holdings using a LLM, enrich them with live market data and news sentiment via the Finnhub API, generate dynamic risk summaries, and interact via a voice-enabled, vision-capable AI chat interface.
+
+User Review Required
+IMPORTANT
+
+API Configurations: The application uses the internal TCS GenAI Lab endpoints (https://genailab.tcs.in/) for chat completions and text embeddings. Ensure your environment has access to the endpoint. Finnhub API Integration: We will integrate with the Finnhub API. If a Finnhub API key is not configured, the backend will dynamically generate realistic market mock data (stock quotes, news sentiment, company news) to ensure a flawless hackathon demo without API limits or offline crashes. Port Configuration: The backend server will run on port 5003 to prevent port conflicts with the existing Travel/BA Summarizer running on port 5002. The frontend Angular server will run on port 4203 (and backend requests will route to http://localhost:5003/api/market).
+
+Open Questions
+None at this stage. The requirements are fully detailed. We will provide a robust mock fallback for Finnhub to guarantee demo availability.
+
+Proposed Changes
+We will create two main directories inside C:\Team6\Travel-Itinerary:
+
+backend-rag-market/ - Python Flask service.
+frontend-market/ - Angular 17 dashboard.
+antigravity_cli_transcript_market.md - The transcript file describing prompts/commands to generate the solution.
+Backend Service: backend-rag-market
+[NEW] 
+requirement.txt
+Specifies dependencies for Flask, RAG vector database, OCR vision, and API request handling.
+
+flask, flask-cors, python-dotenv, werkzeug, langchain, langchain-openai, langchain-community, faiss-cpu, pdfminer.six, httpx, pydantic, tiktoken
+[NEW] 
+config.py
+Declares configuration parameters targeting port 5003, TCS GenAI endpoints, and Finnhub integration parameters.
+
+[NEW] 
+tcs_embeddings.py
+Configures custom SSL-bypass wrapper targeting the GenAI Lab embedding endpoint for indexing news articles.
+
+[NEW] 
+rag_service.py
+Implements:
+
+Holdings Parser: Reads PDF, JSON, CSV, and XML portfolio files.
+LLM Cleanser: Passes messy raw text to the LLM to extract structured JSON holdings data.
+Finnhub API Client: Fetches real-time price quotes, company news, and market sentiment. Includes a robust mock fallback.
+FAISS Vector Store: Loads Finnhub market news articles into the vector database on initialization for Retrieval-Augmented Generation (RAG).
+Risk Summary Generator: Merges holdings data, live quotes, and news sentiment into a detailed, structured prompt for generating natural language risk reports.
+AI Chat & OCR Vision: Handles follow-up queries with RAG context, and processes base64 images for OCR analysis using GPT-4o vision.
+[NEW] 
+app.py
+Exposes Flask API endpoints under /api/market:
+
+GET /news - Load latest market news into RAG vector store.
+POST /upload - Parse and clean uploaded portfolio documents.
+POST /analyze - Enforce Finnhub enrichment and generate risk summary.
+POST /chat - Process interactive user chat (with optional image/OCR).
+GET /documents & DELETE /documents/clear - Manage vector database.
+[NEW] 
+setup.bat
+ & 
+start.bat
+Automation scripts to handle Python virtual environment creation, installation, and execution.
+
+Frontend Dashboard: frontend-market
+We will duplicate the existing hackathon Angular structure and implement a premium capital markets dashboard.
+
+[NEW] 
+environment.ts
+Binds the client API target to http://localhost:5003/api/market.
+
+[NEW] 
+market.model.ts
+Declares types for chat messages, portfolio holdings, quotes, news articles, and risk status.
+
+[NEW] 
+api.service.ts
+Maps HTTP requests to Flask backend endpoints (upload, analyze, news load, chat, clear).
+
+[NEW] 
+app.component.ts
+Core Angular controller that:
+
+Initializes latest market news on startup (loads into RAG).
+Processes file uploads (drag-and-drop support).
+Calls backend to cleanse holdings, fetch live quotes, and analyze risk.
+Configures Web Speech API for voice assistant features:
+Speech-to-Text (STT): Translates spoken user voice queries into chat text.
+Text-to-Speech (TTS): Uses native SpeechSynthesis to read AI chat replies aloud.
+Exposes quick risk-scenario prompts and handles image attachments.
+Calculates dynamic statistics for portfolio charts.
+[NEW] 
+app.component.html
+Implements a stunning slate-dark dashboard layout:
+
+Hero Header: Displays portfolio value and daily change card.
+Left Panel: File upload zone, list of current holdings (cleansed & enriched), and quick risk indicators (flashing alerts for high volatility).
+Middle Panel (Tabs):
+Risk Report: Rich markdown presentation of the AI risk summary.
+Interactive Chart: Custom SVG/CSS chart showing holdings allocation.
+Market News: Feed of Finnhub news currently loaded in the RAG knowledge base.
+Right Panel (AI Chat): Interactive conversational agent with mic/speaker toggles, quick prompts, image attachment controls, and OCR results display.
+[NEW] 
+app.component.scss
+Integrates a rich modern styling theme:
+
+Deep blue-grey background with soft dark gradients.
+Glassmorphism borders (backdrop-filter: blur(10px)).
+Cyber-punk neon accents (electric indigo, mint-green, amber-gold, crimson-red).
+Mic-activation glowing pulse animation.
+CLI Transcript File
+[NEW] 
+antigravity_cli_transcript_market.md
+The complete transcript records all prompt sequences and setup commands required for the Antigravity CLI in Visual Studio Code to generate this entire capital markets solution.
+
+Verification Plan
+Automated Verification
+Backend Verification:
+Run syntax checks on Python files using python -m py_compile.
+Start the Flask server on port 5003 and test API routing (e.g. news fetch and health check).
+Frontend Verification:
+Run compilation checks on the Angular application using npm run build or ng serve --port 4203.
+Manual Demo Walkthrough
+Initial Load: Launch application; verify that live Finnhub news details are automatically fetched and loaded into the vector database.
+Portfolio Upload: Upload a portfolio file (e.g. CSV or PDF of holdings). Click "Analyze & Generate Summary". Verify that:
+Messy text is cleansed by the LLM.
+Symbols are queried on Finnhub for real-time prices.
+A comprehensive risk summary is rendered under the "Risk Report" tab.
+A portfolio allocation chart is drawn.
+Conversational Agent: Ask follow-up queries using the microphone button (Speech-to-Text) and verify text answers are read aloud (Text-to-Speech). Upload an image with chart details, verifying OCR response.
