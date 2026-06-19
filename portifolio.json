@@ -1,0 +1,78 @@
+{
+  "portfolioId": "PF001",
+  "portfolioName": "US Large Cap Growth Fund",
+  "currency": "USD",
+  "aum": 1000000000,
+  "holdings": [
+    {
+      "symbol": "AAPL",
+      "companyName": "Apple Inc.",
+      "sector": "Technology",
+      "quantity": 25000,
+      "avgCost": 185.50
+    },
+    {
+      "symbol": "MSFT",
+      "companyName": "Microsoft Corporation",
+      "sector": "Technology",
+      "quantity": 20000,
+      "avgCost": 410.25
+    },
+    {
+      "symbol": "NVDA",
+      "companyName": "NVIDIA Corporation",
+      "sector": "Technology",
+      "quantity": 18000,
+      "avgCost": 980.40
+    },
+    {
+      "symbol": "AMZN",
+      "companyName": "Amazon.com Inc.",
+      "sector": "Consumer Discretionary",
+      "quantity": 15000,
+      "avgCost": 175.80
+    },
+    {
+      "symbol": "GOOGL",
+      "companyName": "Alphabet Inc.",
+      "sector": "Communication Services",
+      "quantity": 14000,
+      "avgCost": 165.30
+    },
+    {
+      "symbol": "META",
+      "companyName": "Meta Platforms Inc.",
+      "sector": "Communication Services",
+      "quantity": 12000,
+      "avgCost": 490.75
+    },
+    {
+      "symbol": "JPM",
+      "companyName": "JPMorgan Chase & Co.",
+      "sector": "Financials",
+      "quantity": 10000,
+      "avgCost": 205.40
+    },
+    {
+      "symbol": "UNH",
+      "companyName": "UnitedHealth Group Inc.",
+      "sector": "Healthcare",
+      "quantity": 8000,
+      "avgCost": 520.10
+    },
+    {
+      "symbol": "XOM",
+      "companyName": "Exxon Mobil Corporation",
+      "sector": "Energy",
+      "quantity": 15000,
+      "avgCost": 115.25
+    },
+    {
+      "symbol": "WMT",
+      "companyName": "Walmart Inc.",
+      "sector": "Consumer Staples",
+      "quantity": 12000,
+      "avgCost": 68.90
+    }
+  ]
+}

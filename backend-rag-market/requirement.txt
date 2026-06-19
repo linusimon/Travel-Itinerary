@@ -1,0 +1,12 @@
+flask
+flask-cors
+python-dotenv
+werkzeug
+langchain
+langchain-openai
+langchain-community
+faiss-cpu
+pdfminer.six
+httpx
+pydantic
+tiktoken

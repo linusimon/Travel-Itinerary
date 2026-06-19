@@ -1,0 +1,318 @@
+<div class="dashboard-wrapper">
+  <!-- Top Hero Header -->
+  <header class="hero-header">
+    <div class="header-logo">
+      <div class="logo-icon"><i class="fa-solid fa-chart-line-up"></i></div>
+      <div class="logo-text">
+        <h1>Antigravity Capital</h1>
+        <p>Portfolio Risk Analyzer & RAG Assistant</p>
+      </div>
+    </div>
+    
+    <div class="market-status-badge" *ngIf="vectorDbStatus">
+      <span class="status-indicator online"></span>
+      <span class="status-label">RAG Knowledge Base Active: {{ vectorDbStatus.total_chunks }} chunks indexed</span>
+      <button class="clear-db-btn" (click)="clearVectorDb()" title="Clear vector database"><i class="fa-solid fa-trash-can"></i></button>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="header-stats" *ngIf="totalStats">
+      <div class="stat-card total-value">
+        <div class="stat-meta">Portfolio Value</div>
+        <div class="stat-val">${{ totalStats.currentValue | number:'1.2-2' }}</div>
+        <div class="stat-indicator" [ngClass]="totalStats.gainLoss >= 0 ? 'gain' : 'loss'">
+          <i class="fa-solid" [ngClass]="totalStats.gainLoss >= 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down'"></i>
+          {{ totalStats.gainLoss >= 0 ? '+' : '' }}${{ totalStats.gainLoss | number:'1.2-2' }} ({{ totalStats.gainLossPercent >= 0 ? '+' : '' }}{{ totalStats.gainLossPercent | number:'1.2-2' }}%)
+        </div>
+      </div>
+      <div class="stat-card daily-change">
+        <div class="stat-meta">Daily Change</div>
+        <div class="stat-val" [ngClass]="totalStats.dailyChange >= 0 ? 'gain-text' : 'loss-text'">
+          {{ totalStats.dailyChange >= 0 ? '+' : '' }}${{ totalStats.dailyChange | number:'1.2-2' }}
+        </div>
+        <div class="stat-indicator" [ngClass]="totalStats.dailyChangePercent >= 0 ? 'gain' : 'loss'">
+          {{ totalStats.dailyChangePercent >= 0 ? '+' : '' }}{{ totalStats.dailyChangePercent | number:'1.2-2' }}%
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Dashboard Layout -->
+  <main class="dashboard-main">
+    
+    <!-- Left Column: Upload & Holdings -->
+    <section class="left-panel">
+      
+      <!-- Upload Zone -->
+      <div class="upload-container glass-card"
+           [class.drag-over]="isDragOver"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event)">
+        <div class="upload-icon" *ngIf="!isUploading">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+        </div>
+        <div class="upload-icon loading-spinner" *ngIf="isUploading">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+        </div>
+        
+        <h3>Upload Portfolio Document</h3>
+        <p>Drag and drop PDF, CSV, JSON, or XML holdings list here</p>
+        <button class="upload-btn" (click)="triggerFileSelect()" [disabled]="isUploading">
+          Select File
+        </button>
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept=".pdf,.csv,.json,.xml" style="display: none;">
+        
+        <div class="file-loaded-badge" *ngIf="selectedFileName">
+          <i class="fa-solid fa-file-invoice-dollar"></i>
+          <span>{{ selectedFileName }}</span>
+        </div>
+      </div>
+
+      <!-- Holdings List -->
+      <div class="holdings-container glass-card">
+        <div class="panel-header">
+          <h2>Portfolio Holdings (Cleansed & Enriched)</h2>
+          <span class="badge" *ngIf="enrichedHoldings.length > 0">{{ enrichedHoldings.length }} Assets</span>
+        </div>
+
+        <div class="holdings-placeholder" *ngIf="enrichedHoldings.length === 0">
+          <i class="fa-solid fa-rectangle-list"></i>
+          <p>No holdings loaded yet. Upload your portfolio file above to cleanse and analyze holdings.</p>
+        </div>
+
+        <div class="holdings-list" *ngIf="enrichedHoldings.length > 0">
+          <div class="holding-row-card" *ngFor="let h of enrichedHoldings">
+            <div class="holding-main-info">
+              <div class="symbol-name">
+                <span class="sym-badge">{{ h.symbol }}</span>
+                <span class="comp-name" title="{{ h.name }}">{{ h.name }}</span>
+              </div>
+              <div class="holding-value">
+                <span class="current-val">${{ h.currentValue | number:'1.2-2' }}</span>
+                <span class="shares-meta">{{ h.shares }} shares &#64; ${{ h.currentPrice | number:'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <!-- Sentiment Gauge -->
+            <div class="holding-sentiment">
+              <div class="sent-labels">
+                <span>Sentiment</span>
+                <span [ngClass]="h.sentiment.bullishPercent >= 55 ? 'bullish-text' : 'bearish-text'">
+                  {{ h.sentiment.bullishPercent }}% Bullish
+                </span>
+              </div>
+              <div class="sent-bar-wrapper">
+                <div class="sent-bar bullish" [style.width.%]="h.sentiment.bullishPercent"></div>
+                <div class="sent-bar bearish" [style.width.%]="h.sentiment.bearishPercent"></div>
+              </div>
+            </div>
+
+            <div class="holding-volatility-tag" *ngIf="h.dailyChangePercent > 2 || h.dailyChangePercent < -2">
+              <span class="flash-alert"><i class="fa-solid fa-bolt"></i> High Volatility Swings</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Middle Column: Markdown Report & Tabs -->
+    <section class="middle-panel glass-card">
+      <nav class="panel-tabs">
+        <button [class.active]="activeTab === 'report'" (click)="activeTab = 'report'">
+          <i class="fa-solid fa-file-lines"></i> Risk Report
+        </button>
+        <button [class.active]="activeTab === 'chart'" (click)="activeTab = 'chart'">
+          <i class="fa-solid fa-chart-pie"></i> Allocation Chart
+        </button>
+        <button [class.active]="activeTab === 'news'" (click)="activeTab = 'news'">
+          <i class="fa-solid fa-newspaper"></i> Market News
+        </button>
+      </nav>
+
+      <div class="tab-content">
+        <!-- TAB 1: RISK REPORT -->
+        <div class="tab-pane risk-report-pane" *ngIf="activeTab === 'report'">
+          <div class="report-loading" *ngIf="isAnalyzing">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+            <p>Cleansing messy text and running macro risk simulations...</p>
+          </div>
+          
+          <div class="report-placeholder" *ngIf="!isAnalyzing && !riskReportHtml">
+            <i class="fa-solid fa-file-shield"></i>
+            <h2>AI-Powered Portfolio Risk Report</h2>
+            <p>Once you upload a portfolio, the system cleanses raw text, matches assets against Finnhub sentiment networks, retrieves RAG news, and drafts a comprehensive risk dashboard.</p>
+            <button class="demo-btn" (click)="useMockPortfolio()">Load Demo Portfolio</button>
+          </div>
+
+          <div class="report-html-container" *ngIf="!isAnalyzing && riskReportHtml" [innerHTML]="riskReportHtml"></div>
+        </div>
+
+        <!-- TAB 2: ALLOCATION CHART -->
+        <div class="tab-pane chart-pane" *ngIf="activeTab === 'chart'">
+          <div class="chart-placeholder" *ngIf="chartData.length === 0">
+            <i class="fa-solid fa-chart-bar"></i>
+            <h2>Portfolio Allocations</h2>
+            <p>Upload files to parse assets and generate allocation structures.</p>
+          </div>
+
+          <div class="chart-content" *ngIf="chartData.length > 0">
+            <h3>Asset Allocation Breakdown</h3>
+            
+            <!-- Stacked horizontal bar chart -->
+            <div class="stacked-bar-container">
+              <div class="stacked-bar">
+                <div class="stacked-segment" 
+                     *ngFor="let item of chartData" 
+                     [style.width.%]="item.percentage" 
+                     [style.background-color]="item.color"
+                     [title]="item.name + ': ' + (item.percentage | number:'1.1-1') + '%'">
+                </div>
+              </div>
+              <div class="stacked-labels">
+                <div class="stacked-label-item" *ngFor="let item of chartData">
+                  <span class="label-dot" [style.background-color]="item.color"></span>
+                  <span class="label-name">{{ item.name }}</span>
+                  <span class="label-val">{{ item.percentage | number:'1.1-1' }}%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- List allocation cards -->
+            <div class="allocation-grid">
+              <div class="allocation-card" *ngFor="let item of chartData">
+                <div class="alloc-header">
+                  <span class="alloc-title">{{ item.name }}</span>
+                  <span class="alloc-value">${{ item.value | number:'1.2-2' }}</span>
+                </div>
+                <div class="alloc-bar-wrapper">
+                  <div class="alloc-bar-fill" [style.width.%]="item.percentage" [style.background-color]="item.color"></div>
+                </div>
+                <div class="alloc-footer">
+                  <span>Allocation: {{ item.percentage | number:'1.1-1' }}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: MARKET NEWS -->
+        <div class="tab-pane news-pane" *ngIf="activeTab === 'news'">
+          <div class="news-loading" *ngIf="isLoadingNews">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <p>Seeding RAG Vector Store and matching Finnhub headlines...</p>
+          </div>
+          
+          <div class="news-feed" *ngIf="!isLoadingNews">
+            <div class="news-feed-header">
+              <h3>RAG Knowledge Base Feed</h3>
+              <p>These articles are vectorized and stored in FAISS for retrieval during AI risk summarization and chats.</p>
+            </div>
+            
+            <div class="news-item-card" *ngFor="let item of generalNewsFeed">
+              <div class="news-meta">
+                <span class="news-tag">{{ item.tag }}</span>
+                <span class="news-source">{{ item.source }}</span>
+              </div>
+              <h4>{{ item.title }}</h4>
+              <p>{{ item.summary }}</p>
+              <a href="{{ item.url }}" target="_blank" class="news-link">Read full story <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: AI Assistant Chat -->
+    <section class="right-panel chat-container glass-card">
+      <div class="panel-header">
+        <div class="header-title">
+          <i class="fa-solid fa-robot"></i>
+          <div>
+            <h2>Antigravity Advisor</h2>
+            <p>Voice-Enabled Portfolio Specialist</p>
+          </div>
+        </div>
+        <div class="voice-controls">
+          <button class="voice-btn" 
+                  [class.active]="isListening" 
+                  (click)="toggleListening()" 
+                  title="Toggle Speech Recognition (Mic)">
+            <i class="fa-solid" [class.fa-microphone]="!isListening" [class.fa-microphone-lines]="isListening"></i>
+          </button>
+          <button class="voice-btn" 
+                  [class.active]="isTtsEnabled" 
+                  (click)="toggleTts()" 
+                  title="Toggle Speech Synthesis (Speaker)">
+            <i class="fa-solid" [class.fa-volume-high]="isTtsEnabled" [class.fa-volume-xmark]="!isTtsEnabled"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick prompts overlay -->
+      <div class="quick-prompts-row" *ngIf="chatHistory.length <= 1">
+        <button class="quick-prompt-chip" *ngFor="let q of quickPrompts" (click)="selectQuickPrompt(q)">
+          {{ q }}
+        </button>
+      </div>
+
+      <!-- Messages Window -->
+      <div class="chat-messages" #chatScrollContainer>
+        <div class="message-wrapper" *ngFor="let msg of chatHistory" [ngClass]="msg.sender">
+          <div class="message-icon">
+            <i class="fa-solid" [class.fa-user]="msg.sender === 'user'" [class.fa-robot]="msg.sender === 'assistant'"></i>
+          </div>
+          <div class="message-content">
+            <!-- Attached user image preview -->
+            <div class="attached-image-msg" *ngIf="msg.image">
+              <img [src]="msg.image" alt="Uploaded attachment">
+              <div class="image-ocr-label"><i class="fa-solid fa-magnifying-glass-chart"></i> OCR analysis active</div>
+            </div>
+            <p>{{ msg.text }}</p>
+            <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+          </div>
+        </div>
+        <div class="typing-indicator" *ngIf="isChatting">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- Speech Playing Alert -->
+      <div class="speech-active-banner" *ngIf="isPlayingSpeech">
+        <i class="fa-solid fa-waveform-lines fa-bounce"></i>
+        <span>AI is speaking response...</span>
+        <button class="stop-speech-btn" (click)="stopSpeech()"><i class="fa-solid fa-circle-stop"></i> Stop</button>
+      </div>
+
+      <!-- Input Controls -->
+      <div class="chat-input-area">
+        <!-- Attachment previews -->
+        <div class="attachment-preview" *ngIf="attachedImageBase64">
+          <div class="preview-thumb">
+            <img [src]="attachedImageBase64" alt="Image preview">
+            <button class="remove-attachment-btn" (click)="clearImageAttachment()"><i class="fa-solid fa-circle-xmark"></i></button>
+          </div>
+          <div class="preview-name">{{ attachedImageName }}</div>
+        </div>
+
+        <div class="input-row">
+          <!-- Image Attachment Pin Button -->
+          <button class="attach-btn" (click)="imageInput.click()" title="Attach image / chart for OCR Analysis">
+            <i class="fa-solid fa-paperclip"></i>
+          </button>
+          <input type="file" #imageInput (change)="onImageAttached($event)" accept="image/*" style="display: none;">
+
+          <input type="text" 
+                 [(ngModel)]="chatInput" 
+                 (keydown.enter)="sendChatMessage()" 
+                 placeholder="Ask advisor about risks or stress tests..."
+                 [disabled]="isChatting">
+
+          <button class="send-btn" (click)="sendChatMessage()" [disabled]="isChatting || (!chatInput.trim() && !attachedImageBase64)">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
