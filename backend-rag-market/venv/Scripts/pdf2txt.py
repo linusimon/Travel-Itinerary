@@ -1,4 +1,4 @@
-#!C:\Team6\Travel-Itinerary\backend-rag-market\venv\Scripts\python.exe
+#!C:\Learning\Travel-Itinerary\backend-rag-market\venv\Scripts\python.exe
 """A command line tool for extracting text and images from PDF and
 output it to plain text, html, xml or tags.
 """

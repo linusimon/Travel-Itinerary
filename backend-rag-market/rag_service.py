@@ -358,11 +358,15 @@ Example format:
             sentiment = self._get_mock_sentiment(symbol)
         if news is None:
             news = self._get_mock_company_news(symbol)
+        
+        # Get expert analysis from local database
+        expert_analysis = self.get_expert_analysis_for_symbol(symbol)
             
         return {
             "quote": quote,
             "sentiment": sentiment,
-            "news": news
+            "news": news,
+            "expert_analysis": expert_analysis
         }
 
     def query_rag_news(self, query: str, k: int = 3) -> List:
@@ -743,3 +747,204 @@ Based on our retrieved Finnhub news context and your current holdings:
 1. **Market Health**: Inflation (CPI) is showing signs of cooling to 3.1%, but interest rates remain restrictive (5.25%-5.50%).
 2. **Sentiment Check**: Mega-cap tech names (AAPL, MSFT, NVDA) have bullish sentiment profiles, but geopolitical tensions are pushing gold and shipping costs higher.
 3. **Actionable Step**: Keep monitoring daily changes. Let me know if you would like me to simulate a specific stress test or discuss a specific holding in detail!"""
+
+    # --- ADMIN DOCUMENT MANAGEMENT METHODS ---
+    
+    def add_document_to_rag(self, file_content: bytes, filename: str, metadata: Dict) -> Dict:
+        """Add a new document to the RAG vector store with metadata"""
+        if not self.embeddings_available:
+            return {
+                "success": False,
+                "message": "Embeddings not available. Cannot add documents to RAG."
+            }
+        
+        try:
+            print(f"[INFO] Processing document: {filename} ({len(file_content)} bytes)")
+            
+            # Parse document to text
+            raw_text = self.parse_portfolio_document(file_content, filename)
+            
+            if not raw_text or raw_text.startswith("Error"):
+                return {
+                    "success": False,
+                    "message": f"Failed to parse document: {raw_text}"
+                }
+            
+            print(f"[INFO] Extracted {len(raw_text)} characters from {filename}")
+            
+            # Split text into chunks
+            text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=600,
+                chunk_overlap=100
+            )
+            
+            # Create documents with metadata
+            docs = text_splitter.create_documents([raw_text], [metadata])
+            print(f"[INFO] Created {len(docs)} chunks from {filename}")
+            
+            # Add to existing vector store or create new one
+            print("[INFO] Creating embeddings (this may take 30-60 seconds)...")
+            if self.vectordb is None:
+                self.vectordb = FAISS.from_documents(docs, self.embedding_model)
+            else:
+                # Add documents to existing vector store
+                self.vectordb.add_documents(docs)
+            
+            print("[INFO] Saving vector store to disk...")
+            # Save updated vector store
+            self.vectordb.save_local(self.persist_directory, index_name="index")
+            
+            print(f"[OK] Added {len(docs)} chunks from {filename} to RAG")
+            
+            return {
+                "success": True,
+                "message": f"Successfully indexed {len(docs)} chunks from {filename}",
+                "chunks_added": len(docs),
+                "filename": filename
+            }
+            
+        except Exception as e:
+            error_msg = str(e)
+            print(f"[ERROR] Failed to add document to RAG: {error_msg}")
+            traceback.print_exc()
+            
+            # Check for specific error types
+            if "Connection" in error_msg or "timeout" in error_msg.lower():
+                return {
+                    "success": False,
+                    "message": "Embedding service timeout. TCS GenAI Lab may be unavailable. Please try again later."
+                }
+            elif "SSL" in error_msg or "certificate" in error_msg.lower():
+                return {
+                    "success": False,
+                    "message": "SSL connection error. Check network connectivity to TCS GenAI Lab."
+                }
+            else:
+                return {
+                    "success": False,
+                    "message": f"Error adding document: {error_msg}"
+                }
+    
+    def get_rag_statistics(self) -> Dict:
+        """Get statistics about the RAG vector store"""
+        if self.vectordb is None:
+            return {
+                "total_chunks": 0,
+                "total_documents": 0,
+                "documents": []
+            }
+        
+        try:
+            # Get all documents from docstore
+            total_chunks = len(self.vectordb.docstore._dict)
+            
+            # Group by filename to get unique documents
+            document_map = {}
+            for doc_id, doc in self.vectordb.docstore._dict.items():
+                filename = doc.metadata.get('filename', 'Unknown')
+                if filename not in document_map:
+                    document_map[filename] = {
+                        "filename": filename,
+                        "chunks": 0,
+                        "upload_date": doc.metadata.get('upload_date', 'Unknown'),
+                        "file_type": doc.metadata.get('file_type', 'Unknown')
+                    }
+                document_map[filename]["chunks"] += 1
+            
+            documents_list = list(document_map.values())
+            
+            return {
+                "total_chunks": total_chunks,
+                "total_documents": len(documents_list),
+                "documents": documents_list
+            }
+            
+        except Exception as e:
+            print(f"[ERROR] Failed to get RAG statistics: {str(e)}")
+            return {
+                "total_chunks": 0,
+                "total_documents": 0,
+                "documents": [],
+                "error": str(e)
+            }
+    
+    def list_documents(self) -> List[Dict]:
+        """List all documents in the RAG vector store"""
+        if self.vectordb is None:
+            return []
+        
+        try:
+            # Group documents by filename
+            document_map = {}
+            for doc_id, doc in self.vectordb.docstore._dict.items():
+                filename = doc.metadata.get('filename', doc.metadata.get('title', 'Unknown'))
+                if filename not in document_map:
+                    document_map[filename] = {
+                        "document_id": filename,
+                        "filename": filename,
+                        "chunks": 0,
+                        "upload_date": doc.metadata.get('upload_date', 'Unknown'),
+                        "file_type": doc.metadata.get('file_type', 'news'),
+                        "source": doc.metadata.get('source', 'Unknown')
+                    }
+                document_map[filename]["chunks"] += 1
+            
+            return list(document_map.values())
+            
+        except Exception as e:
+            print(f"[ERROR] Failed to list documents: {str(e)}")
+            return []
+    
+    def delete_document(self, document_id: str) -> Dict:
+        """Delete a document from the RAG vector store"""
+        if self.vectordb is None:
+            return {
+                "success": False,
+                "message": "No vector store available"
+            }
+        
+        try:
+            # Find all chunks with matching document_id (filename)
+            ids_to_delete = []
+            for doc_id, doc in self.vectordb.docstore._dict.items():
+                filename = doc.metadata.get('filename', doc.metadata.get('title', ''))
+                if filename == document_id:
+                    ids_to_delete.append(doc_id)
+            
+            if not ids_to_delete:
+                return {
+                    "success": False,
+                    "message": f"Document {document_id} not found"
+                }
+            
+            # Delete the chunks
+            self.vectordb.delete(ids_to_delete)
+            
+            # Save updated vector store
+            self.vectordb.save_local(self.persist_directory, index_name="index")
+            
+            print(f"[OK] Deleted {len(ids_to_delete)} chunks from document {document_id}")
+            
+            return {
+                "success": True,
+                "message": f"Successfully deleted {len(ids_to_delete)} chunks from {document_id}",
+                "chunks_deleted": len(ids_to_delete)
+            }
+            
+        except Exception as e:
+            print(f"[ERROR] Failed to delete document: {str(e)}")
+            traceback.print_exc()
+            return {
+                "success": False,
+                "message": f"Error deleting document: {str(e)}"
+            }
+    
+    def get_expert_analysis_for_symbol(self, symbol: str) -> List[Dict]:
+        """Get expert analysis from database for a given ticker symbol"""
+        import database
+        try:
+            analyses = database.get_expert_analysis_by_key(symbol.upper())
+            return analyses
+        except Exception as e:
+            print(f"[ERROR] Failed to get expert analysis for {symbol}: {str(e)}")
+            return []

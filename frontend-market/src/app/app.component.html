@@ -1,4 +1,4 @@
-<div class="dashboard-wrapper">
+<div class="dashboard-wrapper" *ngIf="showDashboard">
   <!-- Top Hero Header -->
   <header class="hero-header">
     <div class="header-logo">
@@ -7,6 +7,12 @@
         <h1>Antigravity Capital</h1>
         <p>Portfolio Risk Analyzer & RAG Assistant</p>
       </div>
+    </div>
+    
+    <div class="header-actions">
+      <a routerLink="/admin" class="admin-link" title="Admin Dashboard">
+        <i class="fa-solid fa-user-shield"></i> Admin
+      </a>
     </div>
     
     <div class="market-status-badge" *ngIf="vectorDbStatus">
@@ -316,3 +322,7 @@
     </section>
   </main>
 </div>
+
+
+<!-- Router Outlet for Login and Admin Pages -->
+<router-outlet></router-outlet>

@@ -1,4 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { ApiService } from './services/api.service';
 import { Holding, EnrichedHolding, TotalStats, ChatMessage } from './models/market.model';
 
@@ -20,6 +22,7 @@ export class AppComponent implements OnInit {
   isAnalyzing = false;
   isChatting = false;
   isDragOver = false;
+  showDashboard = true;
 
   // File
   selectedFileName = '';
@@ -97,7 +100,14 @@ export class AppComponent implements OnInit {
   @ViewChild('chatScrollContainer') private chatScrollContainer!: ElementRef;
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private router: Router) {
+    // Listen to route changes to show/hide dashboard
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.showDashboard = event.url === '/' || event.url === '/#/' || event.url === '';
+    });
+  }
 
   ngOnInit() {
     this.initializeRAGNews();

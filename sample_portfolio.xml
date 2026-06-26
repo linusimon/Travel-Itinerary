@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<portfolio>
+    <metadata>
+        <account_name>Diversified Growth Portfolio</account_name>
+        <account_number>PF-2026-9421</account_number>
+        <report_date>2026-06-26</report_date>
+        <currency>USD</currency>
+    </metadata>
+    <holdings>
+        <holding>
+            <symbol>AAPL</symbol>
+            <name>Apple Inc.</name>
+            <shares>150</shares>
+            <cost_basis>175.50</cost_basis>
+            <current_price>195.80</current_price>
+            <sector>Technology</sector>
+        </holding>
+        <holding>
+            <symbol>MSFT</symbol>
+            <name>Microsoft Corporation</name>
+            <shares>200</shares>
+            <cost_basis>380.25</cost_basis>
+            <current_price>425.30</current_price>
+            <sector>Technology</sector>
+        </holding>
+        <holding>
+            <symbol>NVDA</symbol>
+            <name>NVIDIA Corporation</name>
+            <shares>75</shares>
+            <cost_basis>520.00</cost_basis>
+            <current_price>785.60</current_price>
+            <sector>Technology</sector>
+        </holding>
+        <holding>
+            <symbol>TSLA</symbol>
+            <name>Tesla Inc.</name>
+            <shares>100</shares>
+            <cost_basis>245.75</cost_basis>
+            <current_price>210.45</current_price>
+            <sector>Automotive</sector>
+        </holding>
+        <holding>
+            <symbol>AMZN</symbol>
+            <name>Amazon.com Inc.</name>
+            <shares>80</shares>
+            <cost_basis>165.30</cost_basis>
+            <current_price>182.90</current_price>
+            <sector>Consumer Cyclical</sector>
+        </holding>
+        <holding>
+            <symbol>GOOGL</symbol>
+            <name>Alphabet Inc. Class A</name>
+            <shares>120</shares>
+            <cost_basis>142.80</cost_basis>
+            <current_price>175.60</current_price>
+            <sector>Technology</sector>
+        </holding>
+        <holding>
+            <symbol>META</symbol>
+            <name>Meta Platforms Inc.</name>
+            <shares>90</shares>
+            <cost_basis>425.60</cost_basis>
+            <current_price>498.20</current_price>
+            <sector>Technology</sector>
+        </holding>
+        <holding>
+            <symbol>JPM</symbol>
+            <name>JPMorgan Chase &amp; Co.</name>
+            <shares>180</shares>
+            <cost_basis>168.90</cost_basis>
+            <current_price>195.75</current_price>
+            <sector>Financial Services</sector>
+        </holding>
+        <holding>
+            <symbol>BAC</symbol>
+            <name>Bank of America Corp</name>
+            <shares>500</shares>
+            <cost_basis>32.45</cost_basis>
+            <current_price>38.60</current_price>
+            <sector>Financial Services</sector>
+        </holding>
+        <holding>
+            <symbol>V</symbol>
+            <name>Visa Inc.</name>
+            <shares>110</shares>
+            <cost_basis>265.20</cost_basis>
+            <current_price>285.40</current_price>
+            <sector>Financial Services</sector>
+        </holding>
+    </holdings>
+</portfolio>

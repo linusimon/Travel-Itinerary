@@ -9,6 +9,9 @@ class Config:
     FLASK_HOST = "0.0.0.0"
     DEBUG = True
 
+    # JWT Configuration
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-in-production")
+
     # TCS GenAI Lab Configuration
     GENAI_API_KEY = os.getenv("HF_TOKEN")
     GENAI_BASE_URL = "https://genailab.tcs.in/"

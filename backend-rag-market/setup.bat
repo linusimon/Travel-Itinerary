@@ -14,15 +14,40 @@ if exist venv (
 )
 
 echo [1/4] Creating virtual environment...
-echo Running: python -m venv venv
-python -m venv venv
-if not exist venv\Scripts\python.exe (
-    echo ERROR: Virtual environment creation failed
-    echo Please ensure Python 3.12 is properly installed
-    echo.
-    pause
-    exit /b 1
-)
+echo Running: python -m venv venv --clear
+echo This may take 1-2 minutes. Please wait...
+echo.
+
+REM Create venv with timeout protection
+set "VENV_CMD=python -m venv venv --clear"
+echo Starting venv creation...
+START /B "" cmd /c "%VENV_CMD% 2>&1"
+
+REM Wait with progress indicator (max 120 seconds)
+set /a counter=0
+:wait_loop
+timeout /t 2 /nobreak >nul
+set /a counter+=2
+if exist venv\Scripts\python.exe goto venv_success
+if %counter% GEQ 120 goto venv_timeout
+echo Still creating virtual environment... (%counter%s elapsed)
+goto wait_loop
+
+:venv_timeout
+echo.
+echo ERROR: Virtual environment creation timed out after 120 seconds
+echo This might be caused by:
+echo - Antivirus software scanning files
+echo - Slow disk I/O
+echo - Python installation issues
+echo.
+echo Try running this command manually: python -m venv venv --clear
+echo.
+pause
+exit /b 1
+
+:venv_success
+timeout /t 2 /nobreak >nul
 echo Virtual environment created successfully!
 echo.
 

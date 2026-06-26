@@ -10,11 +10,22 @@ requests.Session.request = lambda self, method, url, **kwargs: original_request(
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 from werkzeug.utils import secure_filename
 from rag_service import RAGService
 from config import Config
+import database
 
 app = Flask(__name__)
+
+# JWT Configuration
+app.config['JWT_SECRET_KEY'] = Config.JWT_SECRET_KEY
+app.config['JWT_TOKEN_LOCATION'] = ['headers']
+app.config['JWT_HEADER_NAME'] = 'Authorization'
+app.config['JWT_HEADER_TYPE'] = 'Bearer'
+
+# Initialize JWT
+jwt = JWTManager(app)
 
 # Enable CORS for Angular frontend (running on port 4203 or default 4200)
 CORS(app, resources={
@@ -25,8 +36,17 @@ CORS(app, resources={
     }
 })
 
+# Initialize database
+database.init_database()
+
 # Initialize RAG service
 rag_service = RAGService()
+
+# Register blueprints
+from auth import auth_bp
+from admin_routes import admin_bp
+app.register_blueprint(auth_bp)
+app.register_blueprint(admin_bp)
 
 ALLOWED_EXTENSIONS = {'pdf', 'csv', 'json', 'xml'}
 

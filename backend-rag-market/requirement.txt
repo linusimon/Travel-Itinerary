@@ -1,5 +1,6 @@
 flask
 flask-cors
+flask-jwt-extended
 python-dotenv
 werkzeug
 langchain
@@ -10,3 +11,4 @@ pdfminer.six
 httpx
 pydantic
 tiktoken
+bcrypt

@@ -1,0 +1,88 @@
+{
+  "portfolio_name": "Tech & Finance Growth Portfolio",
+  "account_number": "ACC-2024-7854",
+  "as_of_date": "2026-06-26",
+  "total_value": 487650.00,
+  "holdings": [
+    {
+      "ticker": "AAPL",
+      "company": "Apple Inc.",
+      "shares": 150,
+      "cost_basis": 175.50,
+      "current_price": 195.80,
+      "sector": "Technology"
+    },
+    {
+      "ticker": "MSFT",
+      "company": "Microsoft Corporation",
+      "shares": 200,
+      "cost_basis": 380.25,
+      "current_price": 425.30,
+      "sector": "Technology"
+    },
+    {
+      "ticker": "NVDA",
+      "company": "NVIDIA Corporation",
+      "shares": 75,
+      "cost_basis": 520.00,
+      "current_price": 785.60,
+      "sector": "Technology"
+    },
+    {
+      "ticker": "TSLA",
+      "company": "Tesla Inc.",
+      "shares": 100,
+      "cost_basis": 245.75,
+      "current_price": 210.45,
+      "sector": "Automotive"
+    },
+    {
+      "ticker": "AMZN",
+      "company": "Amazon.com Inc.",
+      "shares": 80,
+      "cost_basis": 165.30,
+      "current_price": 182.90,
+      "sector": "Consumer Cyclical"
+    },
+    {
+      "ticker": "GOOGL",
+      "company": "Alphabet Inc. Class A",
+      "shares": 120,
+      "cost_basis": 142.80,
+      "current_price": 175.60,
+      "sector": "Technology"
+    },
+    {
+      "ticker": "META",
+      "company": "Meta Platforms Inc.",
+      "shares": 90,
+      "cost_basis": 425.60,
+      "current_price": 498.20,
+      "sector": "Technology"
+    },
+    {
+      "ticker": "JPM",
+      "company": "JPMorgan Chase & Co.",
+      "shares": 180,
+      "cost_basis": 168.90,
+      "current_price": 195.75,
+      "sector": "Financial Services"
+    },
+    {
+      "ticker": "BAC",
+      "company": "Bank of America Corp",
+      "shares": 500,
+      "cost_basis": 32.45,
+      "current_price": 38.60,
+      "sector": "Financial Services"
+    },
+    {
+      "ticker": "V",
+      "company": "Visa Inc.",
+      "shares": 110,
+      "cost_basis": 265.20,
+      "current_price": 285.40,
+      "sector": "Financial Services"
+    }
+  ]
+}
