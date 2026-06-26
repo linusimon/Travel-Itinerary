@@ -1,15 +1,22 @@
-# Python
+# Python virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Python cache
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-venv/
-env/
-ENV/
 *.egg-info/
 .pytest_cache/
 .coverage
+
+# Node modules
+node_modules/
+package-lock.json
 
 # IDE
 .vscode/
@@ -25,3 +32,8 @@ Thumbs.db
 # Logs
 *.log
 logs/
+
+# Build outputs
+dist/
+build/
+*.egg

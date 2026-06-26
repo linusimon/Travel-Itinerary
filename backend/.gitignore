@@ -11,10 +11,6 @@ ENV/
 .pytest_cache/
 .coverage
 
-# Environment
-.env
-.env.local
-
 # IDE
 .vscode/
 .idea/
